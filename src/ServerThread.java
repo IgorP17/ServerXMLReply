@@ -1,6 +1,5 @@
 import java.io.*;
 import java.net.*;
-import java.util.stream.Stream;
 
 public class ServerThread extends Thread {
   private Socket socket;
@@ -28,13 +27,16 @@ public class ServerThread extends Thread {
             } while (!text.equals("bye"));*/
       String text;
       StringBuilder inString = new StringBuilder();
-//      System.out.println("Reading");
+      System.out.println("Reading");
       while (reader.ready()) {
         text = reader.readLine();
         inString.append(text).append("\n");
+        System.out.println(text);
       }
-//      System.out.println("Done!");
-      writer.print(inString);
+      System.out.println("Done!");
+      writer.print("Responce:\n" + inString);
+      writer.flush();
+      writer.close();
 //      System.out.println(inString);
       socket.close();
     } catch (IOException ex) {

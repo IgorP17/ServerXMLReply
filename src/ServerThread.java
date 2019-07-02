@@ -2,20 +2,20 @@ import java.io.*;
 import java.net.*;
 import java.util.stream.Stream;
 
-public class ServerThread extends Thread{
-    private Socket socket;
+public class ServerThread extends Thread {
+  private Socket socket;
 
-    public ServerThread(Socket socket) {
-        this.socket = socket;
-    }
+  public ServerThread(Socket socket) {
+    this.socket = socket;
+  }
 
-    public void run() {
-        try {
-            InputStream input = socket.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+  public void run() {
+    try {
+      InputStream input = socket.getInputStream();
+      BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 
-            OutputStream output = socket.getOutputStream();
-            PrintWriter writer = new PrintWriter(output, true);
+      OutputStream output = socket.getOutputStream();
+      PrintWriter writer = new PrintWriter(output, true);
 
 
             /*String text;
@@ -26,23 +26,20 @@ public class ServerThread extends Thread{
                 writer.println("Server: " + reverseText);
 
             } while (!text.equals("bye"));*/
-            String text;
-            StringBuilder inString = new StringBuilder();
-            System.out.println("Reading");
-            while (true){
-                
-                text = reader.readLine();
-                if (text == null) break;
-                inString.append(text);
-                System.out.println("GOT:" + text);
-            }
-            System.out.println("Done!");
-            writer.print(inString.toString());
-            System.out.println(inString.toString());
-            socket.close();
-        } catch (IOException ex) {
-            System.out.println("Server exception: " + ex.getMessage());
-            ex.printStackTrace();
-        }
+      String text;
+      StringBuilder inString = new StringBuilder();
+//      System.out.println("Reading");
+      while (reader.ready()) {
+        text = reader.readLine();
+        inString.append(text).append("\n");
+      }
+//      System.out.println("Done!");
+      writer.print(inString);
+//      System.out.println(inString);
+      socket.close();
+    } catch (IOException ex) {
+      System.out.println("Server exception: " + ex.getMessage());
+      ex.printStackTrace();
     }
+  }
 }
